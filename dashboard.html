@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TuneTrack — {{ display_name }}'s Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0d1117;
+      color: #fff;
+      min-height: 100vh;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 2rem;
+      background: #161b22;
+      border-bottom: 1px solid #30363d;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .brand { font-weight: 700; font-size: 1.2rem; color: #1DB954; }
+    .user-info { display: flex; align-items: center; gap: 14px; font-size: 0.9rem; color: #b3b3b3; }
+    .logout-btn {
+      color: #fff; background: #30363d; padding: 6px 14px; border-radius: 999px;
+      text-decoration: none; font-size: 0.85rem;
+    }
+    .logout-btn:hover { background: #3d444d; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+    .greeting { font-size: 1.6rem; font-weight: 600; margin-bottom: 0.3rem; }
+    .subtext { color: #8b949e; margin-bottom: 2rem; }
+    .insights-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 2.5rem;
+    }
+    .insight-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 18px;
+    }
+    .insight-label { font-size: 0.75rem; color: #8b949e; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+    .insight-value { font-size: 1.3rem; font-weight: 600; color: #1DB954; }
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+      gap: 20px;
+    }
+    .chart-box {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .chart-box.full-width { grid-column: 1 / -1; }
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: #8b949e;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">🎧 TuneTrack</div>
+    <div class="user-info">
+      <span>{{ display_name }}</span>
+      <a class="logout-btn" href="/logout">Log out</a>
+    </div>
+  </header>
+
+  <div class="container">
+    {% if no_data %}
+      <div class="empty-state">
+        <h2>No recent listening activity found</h2>
+        <p>Play some music on Spotify, then refresh this page.</p>
+      </div>
+    {% else %}
+      <div class="greeting">Hey {{ display_name }} 👋</div>
+      <p class="subtext">Here's a look at your recent Spotify listening patterns.</p>
+
+      <div class="insights-row">
+        <div class="insight-card">
+          <div class="insight-label">Total Plays Analyzed</div>
+          <div class="insight-value">{{ insights.total_plays }}</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-label">Busiest Time of Day</div>
+          <div class="insight-value">{{ insights.busiest_time }}</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-label">Top Artist</div>
+          <div class="insight-value">{{ insights.top_artist }}</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-label">Top Song</div>
+          <div class="insight-value">{{ insights.top_song }}</div>
+        </div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-box"><div id="chart-time_of_day"></div></div>
+        <div class="chart-box"><div id="chart-day_of_week"></div></div>
+        <div class="chart-box full-width"><div id="chart-heatmap"></div></div>
+        <div class="chart-box full-width"><div id="chart-top"></div></div>
+        <div class="chart-box"><div id="chart-popularity"></div></div>
+        <div class="chart-box"><div id="chart-duration"></div></div>
+      </div>
+    {% endif %}
+  </div>
+
+  {% if not no_data %}
+  <script>
+    const charts = {
+      {% for key, fig in charts.items() %}
+      "{{ key }}": {{ fig | safe }},
+      {% endfor %}
+    };
+
+    const layoutOverrides = {
+      paper_bgcolor: '#161b22',
+      plot_bgcolor: '#161b22',
+      font: { color: '#e6edf3' },
+      xaxis: { gridcolor: '#30363d', linecolor: '#30363d' },
+      yaxis: { gridcolor: '#30363d', linecolor: '#30363d' }
+    };
+
+    for (const [key, fig] of Object.entries(charts)) {
+      const el = document.getElementById('chart-' + key);
+      if (el) {
+        fig.layout = { ...fig.layout, ...layoutOverrides };
+        Plotly.newPlot(el, fig.data, fig.layout, {responsive: true, displayModeBar: false});
+      }
+    }
+  </script>
+  {% endif %}
+</body>
+</html>

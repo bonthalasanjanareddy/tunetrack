@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TuneTrack — Your Spotify Habits</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #0d1117 0%, #1a1a2e 100%);
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card {
+      text-align: center;
+      padding: 3rem 2.5rem;
+      max-width: 420px;
+    }
+    .logo {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, #1DB954, #1ed760);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .tagline {
+      font-size: 1rem;
+      color: #b3b3b3;
+      margin-bottom: 2.5rem;
+      line-height: 1.6;
+    }
+    .login-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #1DB954;
+      color: #000;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 14px 32px;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: transform 0.15s, background 0.15s;
+    }
+    .login-btn:hover {
+      background: #1ed760;
+      transform: scale(1.03);
+    }
+    .footnote {
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      color: #6b6b6b;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">🎧 TuneTrack</div>
+    <p class="tagline">Discover when you listen to music, what you play most, and patterns you never noticed — all from your own Spotify history.</p>
+    <a class="login-btn" href="/login">Connect with Spotify</a>
+    <p class="footnote">Your data stays private to your session. Nothing is stored or shared.</p>
+  </div>
+</body>
+</html>

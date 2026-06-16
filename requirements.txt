@@ -1,0 +1,6 @@
+flask
+spotipy
+pandas
+plotly
+python-dotenv
+gunicorn
